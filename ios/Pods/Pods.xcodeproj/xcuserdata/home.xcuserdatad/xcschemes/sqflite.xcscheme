@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4E8429DC2C3334D4190A029563D54D6A"
+               BlueprintIdentifier = "916BC9DFC76BD8FC5D44E582035F3B3E"
                BuildableName = "libsqflite.a"
                BlueprintName = "sqflite"
                ReferencedContainer = "container:Pods.xcodeproj">

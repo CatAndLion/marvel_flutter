@@ -1,7 +1,6 @@
 
 import 'package:convert/convert.dart';
 import 'package:http/http.dart' as http;
-import 'package:meta/meta.dart';
 import 'dart:convert';
 import 'Responses.dart';
 import 'BaseRequest.dart';
@@ -36,7 +35,7 @@ class Marvel {
     return http.get(s);
   }
 
-  Future<T> _getJsonResponse<T>(String json, {@required builder: JsonBuilder}) {
+  Future<T> _getJsonResponse<T>(String json, {builder: JsonBuilder}) {
     return Future<T>(() {
       Map<String, dynamic> decoded = jsonDecode(json);
       if(decoded.containsKey('data')) {

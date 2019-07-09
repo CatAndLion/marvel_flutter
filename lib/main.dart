@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'MARVEL sureheroes',
       theme: ThemeData(
-        primaryColor: UiUtils.colorPrimary
+        primaryColor: UiUtils.colorPrimaryDark
       ),
       home: MainPage(title: 'MARVEL'),
 

@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:marvel_flutter/bloc/CharacterListBlock.dart';
+import 'package:marvel_flutter/bloc/ListBloc.dart';
 import 'package:marvel_flutter/model/Character.dart';
 import 'package:marvel_flutter/ui/CharacterDescriptionPanel.dart';
 import 'package:marvel_flutter/ui/ComicTextPanel.dart';
+import 'package:marvel_flutter/ui/MarvelTitle.dart';
 import 'package:marvel_flutter/util/UiUtils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,11 +40,8 @@ class _CharacterPageState extends State<CharacterPage> {
     return Scaffold(
 
         appBar: AppBar(
-          title: Text(widget.title, style: TextStyle(
-            fontSize: 42,
-            fontFamily: 'Marvel',
-            color: Colors.white,
-          ),)
+          centerTitle: true,
+          title: MarvelTitle()
           ),
 
         body: Stack(
@@ -56,7 +54,7 @@ class _CharacterPageState extends State<CharacterPage> {
                     DecorationImage(
                         image: CachedNetworkImageProvider(widget.character.thumbnail.url),
                         fit: BoxFit.cover
-                    ) : null
+                    ) : Center(child: Text('no image', style: UiUtils.textStyle))
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(UiUtils.marginLarge),
@@ -69,12 +67,9 @@ class _CharacterPageState extends State<CharacterPage> {
             ),
 
             //comic book list
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: BlocProvider(
-                builder: (_) => bloc,
-                child: CharacterDescriptionPanel(widget.character.description),
-              )
+            BlocProvider(
+              builder: (_) => bloc,
+              child: CharacterDescriptionPanel(widget.character.description),
             )
 
           ],

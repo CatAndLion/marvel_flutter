@@ -6,7 +6,7 @@ import 'package:marvel_flutter/util/UiUtils.dart';
 
 class ComicBookPanel extends StatelessWidget {
 
-  static const double aspect = 850 / 553;
+  static const double aspect = 553 / 850;
 
   final ComicBook item;
 
@@ -16,7 +16,7 @@ class ComicBookPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: item.thumbnail.available ? CachedNetworkImage(imageUrl: item.thumbnail.url) :
-              Text('no image', style: UiUtils.textStyle),
+              Center(child: Text('no image', style: UiUtils.textStyle)),
 
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black87, width: 1),

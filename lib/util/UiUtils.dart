@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 class UiUtils {
   
   static const Color colorPrimary = Color(0XFFCC4224);
+  static const Color colorPrimaryDark = Color(0XFF404040);
   static const Color colorSecondary = Color(0XFF2A75B3);
   static const Color colorActive = Color(0xFFF3D403);
 

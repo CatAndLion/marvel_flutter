@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:marvel_flutter/bloc/CharacterListBlock.dart';
+import 'package:marvel_flutter/bloc/ListBloc.dart';
 import 'package:marvel_flutter/bloc/ListEvent.dart';
 import 'package:marvel_flutter/bloc/ListState.dart';
 import 'package:marvel_flutter/model/Character.dart' as model;
@@ -59,9 +59,8 @@ class _CharacterGridState extends State<CharacterGrid> with TickerProviderStateM
     return BlocBuilder(bloc: bloc,
         builder: (_, ListState<Character> state) {
 
-          if(state.isEmpty) {
-            return state.isLoading ? Center(child: LoadingWidget("Assembling"))
-                : Container();
+          if(state.isEmpty && state.isLoading) {
+            return Center(child: LoadingWidget('Assembling'),);
           }
 
           return CustomScrollView(
@@ -87,12 +86,7 @@ class _CharacterGridState extends State<CharacterGrid> with TickerProviderStateM
               SliverList(
                 delegate: SliverChildListDelegate(
                     <Widget>[
-                      bloc.canLoad ?
-                      Center(
-                          heightFactor: 2,
-                          child: LoadingWidget('to be continue...')
-                      ) :
-                      !bloc.hasData ? Center(heightFactor: 2, child: Text("not found", style: UiUtils.textStyle,),) : Container()
+                      buildBottom()
                     ]),
               )
             ],
@@ -101,10 +95,44 @@ class _CharacterGridState extends State<CharacterGrid> with TickerProviderStateM
   }
 
   void onScroll() {
-    if(!bloc.isLoading && bloc.canLoad &&
+    if(bloc.currentError == null && !bloc.isLoading && bloc.canLoad &&
         _scrollController.offset >= _scrollController.position.maxScrollExtent) {
       // load next page
       bloc.dispatch(ListEvent(page: bloc.nextPage, query: bloc.currentState.query));
+    }
+  }
+
+  Widget buildBottom() {
+    if(bloc.currentError != null) {
+      //error widget
+      return Center(
+        child: Column(
+          children: <Widget>[
+            FlatButton(
+              child: ComicTextPanel.yellow('Reload'),
+              onPressed: () {
+                if(!bloc.isLoading) {
+                  bloc.dispatch(ListEvent(page: bloc.currentState.page,
+                      query: bloc.currentState.query));
+                }
+              },
+            ),
+          ],
+        ),
+      );
+    }
+    if(bloc.canLoad) {
+      return Center(
+        heightFactor: 2,
+        child: LoadingWidget('to be continue...'),
+      );
+    } else if(!bloc.hasData) {
+      return Center(
+        heightFactor: 2,
+        child: Text('not found', style: UiUtils.textStyle,),
+      );
+    } else {
+      return Container();
     }
   }
 

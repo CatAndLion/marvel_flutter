@@ -1,7 +1,7 @@
 // This is a generated file; do not edit or check into version control.
 FLUTTER_ROOT=/Users/home/Development/flutter
-FLUTTER_APPLICATION_PATH=/Users/home/Documents/marvel_flutter
-FLUTTER_TARGET=/Users/home/Documents/marvel_flutter/lib/main.dart
+FLUTTER_APPLICATION_PATH=/Users/home/Documents/git/marvel_flutter
+FLUTTER_TARGET=/Users/home/Documents/git/marvel_flutter/lib/main.dart
 FLUTTER_BUILD_DIR=build
 SYMROOT=${SOURCE_ROOT}/../build/ios
 FLUTTER_FRAMEWORK_DIR=/Users/home/Development/flutter/bin/cache/artifacts/engine/ios

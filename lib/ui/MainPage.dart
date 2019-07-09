@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:marvel_flutter/bloc/CharacterListBlock.dart';
+import 'package:marvel_flutter/bloc/ListBloc.dart';
 import 'package:marvel_flutter/bloc/ListEvent.dart';
 import 'package:marvel_flutter/ui/CharacterGrid.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:marvel_flutter/ui/MarvelTitle.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key, this.title}) : super(key: key);
@@ -13,26 +14,62 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
 
   bool _searchOpened = false;
   final _searchIcon = Icons.search;
   final _closeIcon = Icons.close;
 
-  var _controller = TextEditingController();
   CharacterListBloc bloc;
 
-  var textInputBorder = OutlineInputBorder(
+  final _controller = TextEditingController();
+
+  final textInputBorder = OutlineInputBorder(
     borderSide: BorderSide(color: Colors.black87, width: 3),
     borderRadius: BorderRadius.all(Radius.circular(0)),
   );
 
-
   @override
   void initState() {
-    bloc = CharacterListBloc();
-    _controller.addListener(onSearch);
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _controller.addListener(onSearch);
+
+    bloc = CharacterListBloc();
+    bloc.addErrorListener((error) {
+      if(error != null) {
+        showDialog(context: context, builder: (context) {
+          return AlertDialog(
+            title: Text(error.left.toString()),
+            content: Text(error.right),
+          );
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    print('${this.runtimeType.toString()} state changed ${state.toString()}');
+    switch(state) {
+      case AppLifecycleState.resumed: {
+        bloc?.onResume();
+        return;
+      }
+      case AppLifecycleState.paused: {
+        bloc?.onPause();
+        return;
+      }
+      default: return;
+    }
   }
 
   @override
@@ -40,13 +77,9 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
 
         appBar: AppBar(
-
+          centerTitle: true,
           title: !_searchOpened ?
-          Text(widget.title, style: TextStyle(
-            fontSize: 42,
-            fontFamily: 'Marvel',
-            color: Colors.white,
-          ),) :
+          MarvelTitle() :
           TextField(autofocus: false, controller: _controller,
             keyboardType: TextInputType.text,
             style: TextStyle(fontSize: 16, fontFamily:'Ace', color: Colors.black87),
